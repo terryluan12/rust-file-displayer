@@ -18,19 +18,19 @@ fn main() {
         _ => println!("Error: must be either `server` or client`, not {command}"),
     }
     
-    loop {
+    // loop {
 
 
-        print!("Please write a command: ");
-        io::stdout().flush().unwrap();
+    //     print!("Please write a command: ");
+    //     io::stdout().flush().unwrap();
         
-        let mut command = String::new();
-        io::stdin().read_line(&mut command)
-          .expect("failed to read line");
+    //     let mut command = String::new();
+    //     io::stdin().read_line(&mut command)
+    //       .expect("failed to read line");
 
-        for arg in command.split_whitespace() {
-            println!("{}", arg)
-        }
+    //     for arg in command.split_whitespace() {
+    //         println!("{}", arg)
+    //     }
 
-    }
+    // }
 }
