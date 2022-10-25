@@ -4,7 +4,7 @@ use std::io::{self, Write};
 mod server;
 mod client;
 mod helper;
-
+mod commands;
 
 fn main() {
     // TODO implement command line arguments through std::env::args()

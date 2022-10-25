@@ -1,10 +1,9 @@
 use std::net::{UdpSocket, Ipv4Addr};
-use std::fs;
 use local_ip_address::local_ip;
 
 pub fn client() {
     let mut input = String::new();
-    let local_ip = local_ip().unwrap();
+    let local_ip = local_ip().unwrap(); 
     let local_port: u16 = 5000;
 
     println!("Client mode activated");
@@ -15,7 +14,7 @@ pub fn client() {
 
     loop {
         // Loop to connect to a remote IP Address/port
-        crate::helper::get_input("Please enter the IP address and port to connect to", &mut input)
+        crate::helper::get_input("Please enter address and port of a server to connect to", &mut input)
                             .expect("Error: Error reading client mode command");
 
         let mut arguments = input.split_whitespace();
@@ -31,20 +30,20 @@ pub fn client() {
         loop {
             let mut input = String::new();
 
-            crate::helper::get_input("Please enter a valid path to send", &mut input)
-                                .expect("Error: Error when reading path");
+            crate::helper::get_input("Enter a command", &mut input)
+                                .expect("Error: Error while reading server command");
 
-
-            let mut buffer = match fs::read(input.trim()) {
-                Ok(file) => file,
-                Err(_) => {
-                    println!("Please enter a valid path to a file");
-                    continue;
-                }
-            };
-            println!("Reading file: {:?}", &mut buffer);
+            let mut arguments = input.split_whitespace();
             
-            socket.send_to(&buffer, (remote_ip, remote_port)).expect("couldn't send data");
+            match arguments.next() {
+                Some("send_file") => crate::commands::send_file(&socket, (remote_ip, remote_port), &mut arguments),
+                None => println!("Error: Must send a command"),
+                _ => {
+                    println!("Error reading command, please type in command");
+                    crate::commands::help();
+                }
+            }
+            
 
         }
     }

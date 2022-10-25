@@ -9,7 +9,7 @@ pub fn server() {
     let ip = local_ip().unwrap();
     println!("Server mode activated on {ip}");
 
-    crate::helper::get_input("Enter a command", &mut input)
+    crate::helper::get_input("Enter port and socket to connect to", &mut input)
                                 .expect("Error: Error while reading server command");
     
     let port = input.trim().parse::<u16>().expect("Error: Input not an integer");

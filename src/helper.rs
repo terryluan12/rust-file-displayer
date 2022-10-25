@@ -1,7 +1,7 @@
 use std::io::{self, Write};
 
 pub fn get_input(message: &str, input: &mut String) -> io::Result<()> {
-    println!("{message}\n");
+    println!("{message}");
     print!("> ");
     io::stdout().flush()?;
 
