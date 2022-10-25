@@ -1,6 +1,6 @@
 use std::io::{self, Write};
 
-pub fn getInput(message: &str, input: &mut String) -> io::Result<()> {
+pub fn get_input(message: &str, input: &mut String) -> io::Result<()> {
     println!("{message}\n");
     print!("> ");
     io::stdout().flush()?;

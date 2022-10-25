@@ -5,14 +5,14 @@ use local_ip_address::local_ip;
 
 pub fn client() {
     let mut input = String::new();
-    let localIp = local_ip().unwrap();
-    let localPort: u16 = 5000;
+    let local_ip = local_ip().unwrap();
+    let local_port: u16 = 5000;
 
     println!("Client mode activated");
     
     // Binding to port
-    let socket = UdpSocket::bind((localIp, localPort)).expect("couldn't bind to address");
-    println!("Binded to local port {localPort}");
+    let socket = UdpSocket::bind((local_ip, local_port)).expect("couldn't bind to address");
+    println!("Binded to local port {local_port}");
 
     loop {
         // Loop to connect to a remote IP Address/port
@@ -25,18 +25,18 @@ pub fn client() {
         let mut arguments = input.split_whitespace();
 
         // Getting remote IP Address and port from input
-        let remoteIp = arguments.next().expect("Error: Error reading the Argument");
-        let remoteIp = remoteIp.parse::<Ipv4Addr>()
+        let remote_ip = arguments.next().expect("Error: Error reading the Argument");
+        let remote_ip = remote_ip.parse::<Ipv4Addr>()
                     .expect("Error: Must type a valid IPv4 Address");
-        let remotePort = arguments.next().expect("Error: Error reading the Argument");
-        let remotePort = remotePort.parse::<u16>()
+        let remote_port = arguments.next().expect("Error: Error reading the Argument");
+        let remote_port = remote_port.parse::<u16>()
                         .expect("Error: Error while reading port number");
         
         loop {
             let mut input = String::new();
             let mut buffer = Vec::new();
 
-            crate::helper::getInput("Please enter a valid path to send.", &mut input).expect("Error: Error when getting input");
+            crate::helper::get_input("Please enter a valid path to send.", &mut input).expect("Error: Error when getting input");
 
 
             buffer = match fs::read(input.trim()) {
@@ -48,7 +48,7 @@ pub fn client() {
             };
             println!("Reading file: {:?}", &mut buffer);
             
-            socket.send_to(&buffer, (remoteIp, remotePort)).expect("couldn't send data");
+            socket.send_to(&buffer, (remote_ip, remote_port)).expect("couldn't send data");
 
         }
     }
