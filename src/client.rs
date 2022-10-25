@@ -1,15 +1,14 @@
-use std::net::{UdpSocket, Ipv4Addr};
-use local_ip_address::local_ip;
+use std::net::{IpAddr};
+use crate::user::User;
 
 pub fn client() {
     let mut input = String::new();
-    let local_ip = local_ip().unwrap(); 
     let local_port: u16 = 5000;
-
+    
     println!("Client mode activated");
     
-    // Binding to port
-    let socket = UdpSocket::bind((local_ip, local_port)).expect("couldn't bind to address");
+    // Creating user bound to port `local_port`
+    let user = User::new(local_port);
     println!("Binded to local port {local_port}");
 
     loop {
@@ -21,7 +20,7 @@ pub fn client() {
 
         // Getting remote IP Address and port from input
         let remote_ip = arguments.next().expect("Error: Error reading the Argument");
-        let remote_ip = remote_ip.parse::<Ipv4Addr>()
+        let remote_ip = remote_ip.parse::<IpAddr>()
                     .expect("Error: Must type a valid IPv4 Address");
         let remote_port = arguments.next().expect("Error: Error reading the Argument");
         let remote_port = remote_port.parse::<u16>()
@@ -36,7 +35,7 @@ pub fn client() {
             let mut arguments = input.split_whitespace();
             
             match arguments.next() {
-                Some("send_file") => crate::commands::send_file(&socket, (remote_ip, remote_port), &mut arguments),
+                Some("send_file") => crate::commands::send_file(&user, (remote_ip, remote_port), &mut arguments),
                 None => println!("Error: Must send a command"),
                 _ => {
                     println!("Error reading command, please type in command");

@@ -1,10 +1,10 @@
-use std::net::{UdpSocket, Ipv4Addr};
+use std::net::{IpAddr};
 use std::str::SplitWhitespace;
-
 use std::fs;
+use crate::user::User;
 
 
-pub fn send_file(socket: &UdpSocket, addr: (Ipv4Addr, u16),  arguments: &mut SplitWhitespace) {
+pub fn send_file(user: &User, addr: (IpAddr, u16),  arguments: &mut SplitWhitespace) {
     let path = arguments.next().expect("Error: Missing argument after command");
 
 
@@ -17,7 +17,7 @@ pub fn send_file(socket: &UdpSocket, addr: (Ipv4Addr, u16),  arguments: &mut Spl
     };
     println!("Reading file: {:?}", &mut buffer);
 
-    socket.send_to(&buffer, addr).expect("couldn't send data");
+    user.get_socket().send_to(&buffer, addr).expect("couldn't send data");
 }
 
 pub fn help() {

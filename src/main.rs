@@ -5,6 +5,7 @@ mod server;
 mod client;
 mod helper;
 mod commands;
+mod user;
 
 fn main() {
     // TODO implement command line arguments through std::env::args()
@@ -19,19 +20,4 @@ fn main() {
         _ => println!("Error: must be either `server` or client`, not {command}"),
     }
     
-    // loop {
-
-
-    //     print!("Please write a command: ");
-    //     io::stdout().flush().unwrap();
-        
-    //     let mut command = String::new();
-    //     io::stdin().read_line(&mut command)
-    //       .expect("failed to read line");
-
-    //     for arg in command.split_whitespace() {
-    //         println!("{}", arg)
-    //     }
-
-    // }
 }
