@@ -1,13 +1,21 @@
 use std::io::{self, Write};
 use std::net::{UdpSocket, Ipv4Addr};
 use std::fs;
+use local_ip_address::local_ip;
 
 pub fn client() {
     let mut input = String::new();
-    let host = "127.0.0.1:52000";
+    let localIp = local_ip().unwrap();
+    let localPort: u16 = 5000;
+
     println!("Client mode activated");
+    
+    // Binding to port
+    let socket = UdpSocket::bind((localIp, localPort)).expect("couldn't bind to address");
+    println!("Binded to local port {localPort}");
 
     loop {
+        // Loop to connect to a remote IP Address/port
         println!("Please enter the IP address and port to connect to.");
         print!("> ");
         io::stdout().flush().unwrap();
@@ -16,30 +24,20 @@ pub fn client() {
             .expect("Error: Error reading client mode command");
         let mut arguments = input.split_whitespace();
 
-        // Getting IP Address
-        let ip = arguments.next().expect("Error: Error reading the Argument");
-        let ip = ip.parse::<Ipv4Addr>()
-                    .expect("Error: Error, Must type an IPv4 Address");
-        println!("IP address is {ip}");
-
-        // Getting port
-        let port = arguments.next().expect("Error: Error reading the Argument");
-        let port = port.parse::<u16>()
+        // Getting remote IP Address and port from input
+        let remoteIp = arguments.next().expect("Error: Error reading the Argument");
+        let remoteIp = remoteIp.parse::<Ipv4Addr>()
+                    .expect("Error: Must type a valid IPv4 Address");
+        let remotePort = arguments.next().expect("Error: Error reading the Argument");
+        let remotePort = remotePort.parse::<u16>()
                         .expect("Error: Error while reading port number");
         
-        // Binding to port
-        let socket = UdpSocket::bind(host).expect("couldn't bind to address");
-    
         loop {
             let mut input = String::new();
             let mut buffer = Vec::new();
 
-            println!("Please enter a valid path to a file to send.");
-            print!("> ");
-            io::stdout().flush().unwrap();
+            crate::helper::getInput("Please enter a valid path to send.", &mut input).expect("Error: Error when getting input");
 
-            io::stdin().read_line(&mut input)
-                .expect("Error: Error reading client mode command");
 
             buffer = match fs::read(input.trim()) {
                 Ok(file) => file,
@@ -50,7 +48,7 @@ pub fn client() {
             };
             println!("Reading file: {:?}", &mut buffer);
             
-            socket.send_to(&buffer, (ip, port)).expect("couldn't send data");
+            socket.send_to(&buffer, (remoteIp, remotePort)).expect("couldn't send data");
 
         }
     }

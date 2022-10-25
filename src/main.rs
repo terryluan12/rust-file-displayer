@@ -1,8 +1,9 @@
 // use std::net::TcpStream;
 use std::io::{self, Write};
 // use std::env;
-pub mod server;
-pub mod client;
+mod server;
+mod client;
+mod helper;
 
 
 fn main() {

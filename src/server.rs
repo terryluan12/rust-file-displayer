@@ -1,12 +1,13 @@
 use std::io::{self, Write};
 use std::net::{UdpSocket, Ipv4Addr};
 use std::fs::OpenOptions;
+use local_ip_address::local_ip;
 
 pub fn server() {
     let mut input = String::new();
     let mut buffer = [0; 500];
-    let ip = Ipv4Addr::new(127, 0, 0, 1);
-    println!("Server mode activated");
+    let ip = local_ip().unwrap();
+    println!("Server mode activated on {ip}");
 
     print!("> ");
     io::stdout().flush().unwrap();
