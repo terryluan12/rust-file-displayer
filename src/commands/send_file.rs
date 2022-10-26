@@ -42,7 +42,3 @@ pub fn send_file(user: &User, addr: (IpAddr, u16),  arguments: &mut SplitWhitesp
 
     Ok(())
 }
-
-pub fn help() {
-
-}
