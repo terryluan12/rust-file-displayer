@@ -1,5 +1,7 @@
 use std::net::{IpAddr};
+
 use crate::user::User;
+use crate::commands::{help, send_file};
 
 pub fn client() {
     let mut input = String::new();
@@ -28,18 +30,21 @@ pub fn client() {
         
         loop {
             let mut input = String::new();
-
             crate::helper::get_input("Enter a command", &mut input)
                                 .expect("Error: Error while reading server command");
 
-            let mut arguments = input.split_whitespace();
+            arguments = input.split_whitespace();
+
             
             match arguments.next() {
-                Some("send_file") => crate::commands::send_file(&user, (remote_ip, remote_port), &mut arguments),
+                Some("send_file") => match send_file(&user, (remote_ip, remote_port), &mut arguments) {
+                                        Ok(value) => (),
+                                        Err(e) => println!("{e}"),
+                                    },
                 None => println!("Error: Must send a command"),
                 _ => {
                     println!("Error reading command, please type in command");
-                    crate::commands::help();
+                    help();
                 }
             }
             
